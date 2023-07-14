@@ -2,10 +2,10 @@
 - name: Creating Welcome Message
   hosts: server1
   strategy: free
-  gather_facts: False
+  gather_facts: false
   become: true
   tasks:
-  - name: Welcome to the RHCSA 8 Study/Test Environment!
+  - name: Welcome to the RHCSA 9 Study/Test Environment!
     debug:
       msg:
         - ' The repo server, Server 1, and Server 2 have been set up successfully!'

@@ -5,19 +5,24 @@
   ignore_errors: true
   gather_facts: false
   tasks:
+
   - name: Resetting Python
     file:
       src: /usr/bin/python3.6
       path: /usr/bin/python
       state: link
+
   - name: Resetting Hostname
     hostname: name=server1.eight.example.com
+
   - name: Resetting network config
     shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.150/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search eight.example.com ipv4.method manual
+
   - name: Reloading Network
-    service: 
+    service:
       name: NetworkManager
       state: restarted 
+
   - name: Rebuilding Host File
     copy:
       dest: /etc/hosts
@@ -27,32 +32,38 @@
     sysctl:
       name: net.ipv4.ip_forward
       value: '0'
-      sysctl_set: yes
+      sysctl_set: true
+
   - name: Resetting Timezone
     timezone:
       name: America/Los_Angeles
+
   - name: Erasing Repos
     file:
       path: /etc/yum.repos.d/*
       state: absent
+
   - name: Erasing Web Server Configuration
     file:
       path: /var/www/html/*
       state: absent
+
   - name: Erasing Shell Script (if present)
     file:
       path: /awesome.sh
       state: absent
+
   - name: Removing users
     user:
       name: "{{ item }}"
       state: absent
-      remove: yes
+      remove: true
     with_items:
       - phil
       - laura
       - stewart
       - kevin
+
   - name: Removing Added Directories
     file:
       path: /"{{ item }}"
@@ -60,6 +71,7 @@
     with_items:
       - accounting
       - marketing
+
   - name: Removing Temporary Files
     file:
       path: /"{{ item }}"
@@ -67,6 +79,7 @@
     with_items:
       - tmp
       - find
+
   - name: Readjusting Grub File
     lineinfile:
       state: present
@@ -74,45 +87,53 @@
       insertafter: 'true'
       regexp: '^(GRUB_CMDLINE_LINUX=(?!.* audit)\"[^\"]+)(\".*)'
       line: 'GRUB_CMDLINE_LINUX="no_timer_check crashkernel=auto resume=/dev/mapper/rhel_rhel8-swap rd.lvm.lv=rhel_rhel8/root rd.lvm.lv=rhel_rhel8/swap biosdevname=0 net.ifnames=0 rhgb quiet"'
+
   - name: Starting services
     service:
       name: "{{ item }}"
       state: restarted
-      enabled: yes
+      enabled: true
     with_items:
       - firewalld
       - httpd
+
   - name: Enabling Firewall Services
-    firewalld: 
+    firewalld:
       service: "{{ item }}"
-      immediate: yes
-      permanent: yes
+      immediate: true
+      permanent: true
       state: enabled
     with_items:
-      - http 
-      - https 
-      - ntp 
+      - http
+      - https
+      - ntp
       - dns
       - ftp
+
   - name: Reloading Firewall
     service: name=firewalld state=restarted
+
   - name: Enabling IPV6
     sysctl:
       name: "{{ item }}"
       value: '0'
-      sysctl_set: yes
+      sysctl_set: true
     with_items:
       - net.ipv6.conf.lo.disable_ipv6
       - net.ipv6.conf.all.disable_ipv6
+
   - name: Changing User Password
     shell: echo vagrant | sudo passwd vagrant --stdin
+
   - name: Changing Root Password
     shell: echo password | sudo passwd root --stdin
+
   - name: Recreating Welcome Message
     file:
       path: /etc/profile.d/welcome.sh
       state: touch
       mode: 0755
+
   - name: Building Welcome Message then rebooting
     blockinfile:
       dest: /etc/profile.d/welcome.sh
@@ -138,36 +159,43 @@
          #
          # For root - use \`sudo\` or \`sudo su -\`
          #
-         # Repo/AppStream 
-         # Available to use from http://repo.eight.example.com/BaseOS 
+         # Repo/AppStream
+         # Available to use from http://repo.eight.example.com/BaseOS
          # and http://repo.eight.example.com/AppStream
          "
+
   - name: Adjusting Services and Rebooting
     selinux:
       state: permissive
       policy: targeted
+
   - name: Rebooting Host
     reboot:
 # ----------------------------------------------------------------------
 - name: Resetting Server 2 
   hosts: server2
   strategy: free
-  gather_facts: False
+  gather_facts: false
   ignore_errors: true
   tasks:
+
   - name: Resetting Python
     file:
       src: /usr/bin/python3.6
       path: /usr/bin/python
       state: link
+
   - name: Setting Hostname
     hostname: name=server2.eight.example.com
+
   - name: Resetting network config
     shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.151/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search eight.example.com ipv4.method manual
+
   - name: Reloading Network
     service: 
       name: NetworkManager
       state: restarted 
+
   - name: Building Host File
     copy:
       dest: /etc/hosts
@@ -177,28 +205,33 @@
     sysctl:
       name: net.ipv4.ip_forward
       value: '0'
-      sysctl_set: yes
+      sysctl_set: true
+
   - name: Resetting Timezone
     timezone:
       name: America/Los_Angeles
+
   - name: Erasing Web Server Configuration
     file:
       path: /var/www/html/*
       state: absent
+
   - name: Erasing Shell Script (if present)
     file:
       path: /awesome.sh
       state: absent
+
   - name: Removing users
     user:
       name: "{{ item }}"
       state: absent
-      remove: yes
+      remove: true
     with_items:
       - phil
       - laura
       - stewart
       - kevin
+
   - name: Removing Added Directories
     file:
       path: /"{{ item }}"
@@ -206,6 +239,7 @@
     with_items:
       - accounting
       - marketing
+
   - name: Removing Temporary Files
     file:
       path: /"{{ item }}"
@@ -213,6 +247,7 @@
     with_items:
       - tmp
       - find
+
   - name: Adjusting Grub File
     lineinfile:
       state: present
@@ -220,51 +255,62 @@
       insertafter: 'true'
       regexp: '^(GRUB_CMDLINE_LINUX=(?!.* audit)\"[^\"]+)(\".*)'
       line: 'GRUB_CMDLINE_LINUX="no_timer_check crashkernel=auto resume=/dev/mapper/rhel_rhel8-swap rd.lvm.lv=rhel_rhel8/root rd.lvm.lv=rhel_rhel8/swap biosdevname=0 net.ifnames=0 rhgb quiet"'
+
   - name: Reading Partition Information
     parted: device=/dev/sdb unit=MiB
     register: sdb_info
+
   - name: Removing all partitions from additional disk
     parted:
       device: /dev/sdb
       number: '{{ item.num }}'
       state: absent
     loop: '{{ sdb_info.partitions }}'
+
   - name: Creating Temporary Repo File
     file:
       path: /etc/yum.repos.d/rpms.repo
       state: touch
       mode: 0755
+
   - name: Building Repo File
     copy:
       dest: /etc/yum.repos.d/rpms.repo
       content: "[base]\nname=Base\nbaseurl=http://repo/BaseOS\ngpgcheck=0\nenabled=1\n\n[apps]\nname=Apps\nbaseurl=http://repo/AppStream\ngpgcheck=0\nenabled=1"
-      force: yes
+      force: true
+
   - name: Environment Packages Installed.
-    yum: 
+    yum:
       name: man-pages
       state: present
+
   - name: Starting services
     service:
       name: "{{ item }}"
       state: started
-      enabled: yes
+      enabled: true
     with_items:
       - firewalld
       - httpd
+
   - name: Erasing Repos
     file:
       path: /etc/yum.repos.d/*
       state: absent
-    become: yes
+    become: true
+
   - name: Changing User Password
     shell: echo vagrant | sudo passwd vagrant --stdin
+
   - name: Changing Root Password
     shell: echo password | sudo passwd root --stdin
+
   - name: Creating Welcome Message
     file:
       path: /etc/profile.d/welcome.sh
       state: touch
       mode: 0755
+
   - name: Building Welcome Message then rebooting
     blockinfile:
       dest: /etc/profile.d/welcome.sh
@@ -297,12 +343,15 @@
          # 
          # There are also two additional NICs.
          "
+
   - name: Adjusting Services and Rebooting
     selinux:
       state: permissive
       policy: targeted
+
   - name: Rebooting Server 2
     reboot:
+
   - name: Environment Reset Complete
     debug:
       msg:

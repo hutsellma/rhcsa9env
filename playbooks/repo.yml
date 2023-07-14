@@ -1,48 +1,123 @@
 ---
+
 - name: Setting up Repo Server
   hosts: repo
   strategy: free
   ignore_errors: true
   gather_facts: false
   tasks:
+
   - name: Setting Hostname
     hostname: name=repo.eight.example.com
+
   - name: Configuring network
     shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.149/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.method manual
+
   - name: Building Host File
     copy:
       dest: /etc/hosts
       content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n:1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n192.168.55.149 repo.eight.example.com repo\n192.168.55.150 server1.eight.example.com server1\n192.168.55.151 server2.eight.example.com server2"
-      force: yes
+      force: true
+
+  - name: Install nfs
+    yum:
+      name: nfs-utils
+      state: present
+
+  - name: Enable service nfs
+    service:
+      name: nfs-server
+      enabled: true
+
   - name: Starting services
     service:
       name: "{{ item }}"
       state: started
-      enabled: yes
+      enabled: true
     with_items:
       - firewalld
       - httpd
+      - nfs-server
+
   - name: Enabling Firewall Services
-    firewalld: 
-      service: "{{ item }}"
-      immediate: yes
-      permanent: yes
+    firewalld:
+      service: '{{ item }}'
+      immediate: true
+      permanent: true
       state: enabled
     with_items:
-      - http 
-      - https 
-      - ntp 
+      - http
+      - https
+      - ntp
       - dns
       - ftp
+      - nfs
+
   - name: Enabling IPV6
-    shell: sysctl net.ipv6.conf.lo.disable_ipv6=0 ; sysctl net.ipv6.conf.all.disable_ipv6=0
+    sysctl:
+      name: '{{ item }}'
+      value: '0'
+      reload: true
+    loop:
+      - net.ipv6.conf.lo.disable_ipv6
+      - net.ipv6.conf.all.disable_ipv6
+
   - name: Creating Welcome Message
     file:
       path: /etc/profile.d/welcome.sh
       state: touch
-      mode: 0755
+      mode: '0755'
+
+  - name: Setup NFS Directories
+    file:
+      path: "/export/{{ item }}"
+      state: directory
+    loop:
+      - it_files
+      - dba_files
+      - home
+
+  - name: Setup NFS home Directories
+    file:
+      path: "/export/home/{{ item }}"
+      state: directory
+    loop:
+      - manny
+      - moe
+      - jack
+      - marcia
+      - jan
+
+  - name: Add the default profile files
+    shell: for user in manny moe jack marcia jan; do cp /etc/skel/.b* /export/home/$user; done
+
+  - name: Change ownership on profiles
+    file:
+      path: "/export/home/{{ item.path }}"
+      state: directory
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      recurse: true
+    loop:
+      - { path: 'manny', owner: '1010', group: '1010'}
+      - { path: 'moe', owner: '1011', group: '1011'}
+      - { path: 'jack', owner: '1012', group: '1012'}
+      - { path: 'marcia', owner: '1013', group: '1013'}
+      - { path: 'jan', owner: '1014', group: '1014'}
+
+  - name: Setup exports file
+    copy:
+      dest: /etc/exports
+      content: |
+        /export/home         192.168.55.0/24(rw,sync,no_root_squash)
+        /export/it_files     192.168.55.0/24(rw,sync,no_root_squash)
+        /export/dba_files    192.168.55.0/24(rw,sync,no_root_squash)
+    notify:
+      - nfs-restart
+
   - name: Fixing SELinux Contexts
     shell: restorecon -Rv /var/www/html
+
   - name: Building Welcome Message
     blockinfile:
       dest: /etc/profile.d/welcome.sh
@@ -69,3 +144,9 @@
          # This system is running `cat /etc/redhat-release`
          #
          "
+
+  handlers:
+    - name: nfs-restart
+      service:
+        name: nfs-server
+        state: restarted
