@@ -1,4 +1,4 @@
-# RHCSA 8 Automated Practice Deployment
+# RHCSA 9 Automated Practice Deployment
 
 Powered by Ansible and Vagrant
 
@@ -24,8 +24,8 @@ Alternatively, you can install everything individually below.
 Once the above software is installed. Do the following if you're running the environment on Mac:
 
 1. Create a separate `~/bin` directory and `cd` to it.  (The directory doesn't have to be ~/bin, it can be anything you want.)
-2. Clone the environment repo to it with `git clone https://github.com/rdbreak/rhcsa8env.git`
-3. Change to the `rhcsa8env` directory that is now in your `~/bin` directory.
+2. Clone the environment repo to it with `git clone https://github.com/hutsellma/rhcsa9env.git`
+3. Change to the `rhcsa9env` directory that is now in your `~/bin` directory.
 4. Run `vagrant up` to deploy the environment (If the environment has a designated repo VM it will take the longest to deploy the first time only, this is because the repo system has all the packages available to the base release but will be quicker on subsequent deployments.)
 
 ## CentOS/RHEL/Manjaro/Arch
@@ -36,16 +36,16 @@ _NOTE - If it's been awhile since you've run yum update, do that first. Reboot i
 
 _NOTE2 - If you receive an error for an ansible guest vagrant plugin, DO NOT worry, as there are two different plugins related to Ansible and only one needs to be installed._
 
-For CentoOS/RHEL7/Manjaro/Arch (Continue below for RHEL 8 specific script)
+For CentoOS/RHEL7/Manjaro/Arch (Continue below for RHEL 9 specific script)
 
 ```shell
 systemctl stop packagekit; yum install -y epel-release && yum install -y git binutils gcc make patch libgomp glibc-headers glibc-devel kernel-headers kernel-devel dkms libvirt libvirt-devel ruby-devel libxslt-devel libxml2-devel libguestfs-tools-c ; mkdir ~/Vagrant ; cd ~/Vagrant ; curl -o  vagrant_2.2.6_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.rpm && yum install -y vagrant_2.2.6_x86_64.rpm && vagrant plugin install vagrant-guest_ansible ; vagrant plugin install vagrant-guest-ansible ; wget -O /etc/yum.repos.d/virtualbox.repo wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo ; yum install -y VirtualBox-6.0 && systemctl start packagekit
 ```
 
-If you're using RHEL 8, use the script below:
+If you're using RHEL 9, use the script below:
 
 ```shell
-systemctl stop packagekit; dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm ; dnf install -y git binutils gcc make patch libgomp glibc-headers glibc-devel kernel-headers kernel-devel dkms libvirt libvirt-devel ruby-devel libxslt-devel libxml2-devel libguestfs-tools-c ; mkdir ~/Vagrant ; cd ~/Vagrant ; curl -o  vagrant_2.2.6_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.rpm && dnf install -y vagrant_2.2.6_x86_64.rpm && vagrant plugin install vagrant-guest_ansible ; wget -O /etc/yum.repos.d/virtualbox.repo wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo ; dnf install -y VirtualBox-6.0 && /usr/lib/virtualbox/vboxdrv.sh setup ; usermod -a -G vboxusers root ; systemctl start packagekit
+systemctl stop packagekit; dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm ; dnf install -y git binutils gcc make patch libgomp glibc-headers glibc-devel kernel-headers kernel-devel dkms libvirt libvirt-devel ruby-devel libxslt-devel libxml2-devel libguestfs-tools-c ; mkdir ~/Vagrant ; cd ~/Vagrant ; curl -o  vagrant_2.2.6_x86_64.rpm https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.rpm && dnf install -y vagrant_2.2.6_x86_64.rpm && vagrant plugin install vagrant-guest_ansible ; wget -O /etc/yum.repos.d/virtualbox.repo wget http://download.virtualbox.org/virtualbox/rpm/rhel/virtualbox.repo ; dnf install -y VirtualBox-6.0 && /usr/lib/virtualbox/vboxdrv.sh setup ; usermod -a -G vboxusers root ; systemctl start packagekit
 ```
 
 Also, install the Virtualbox extension pack below
@@ -55,8 +55,8 @@ Also, install the Virtualbox extension pack below
 Once the above software is installed. Do the following if you're running the environment on Linux:
 
 1. Create a separate `~/bin` directory and `cd` to it.  (The directory doesn't have to be ~/bin, it can be anything you want.)
-2. Clone the environment repo to it with `git clone https://github.com/rdbreak/rhcsa8env.git`
-3. Change to the `rhcsa8env` directory that is now in your `~/bin` directory.
+2. Clone the environment repo to it with `git clone https://github.com/hutsellma/rhcsa9env.git`
+3. Change to the `rhcsa9env` directory that is now in your `~/bin` directory.
 4. Run `vagrant up` to deploy the environment (If the environment has a designated repo VM it will take the longest to deploy the first time only, this is because the repo system has all the packages available to the base release but will be quicker on subsequent deployments.)
 
 ## Windows/Fedora
@@ -76,9 +76,9 @@ dnf -y install wget git binutils gcc make patch libgomp glibc-headers glibc-deve
 Once the above software is installed. Do the following if you're running the environment on Windows:
 
 1. Create a separate `~/bin` directory and `cd` to it using the same PowerShell/Terminal as Administrator/Root.  (The directory doesn't have to be ~/bin, it can be anything you want.)
-2. Use your browser of choice and navigate to https://github.com/rdbreak/rhcsa8env, press the green “Clone or download” button then the “Download ZIP” button. Or use Github Desktop (See below).
+2. Use your browser of choice and navigate to https://github.com/hutsellma/rhcsa9env, press the green “Clone or download” button then the “Download ZIP” button. Or use Github Desktop (See below).
 3. Once downloaded, unzip the file and move it to the directory you created earlier, `~/bin` in the above example.
-4. Use PowerShell/Terminal as Administrator/Root again and cd to the `~/bin/rhcsa8env` directory then run `vagrant up` to deploy the environment. (If the environment has a designated repo VM it will take the longest to deploy the first time only, this is because the repo system has all the packages available to the base release but will be quicker on subsequent deployments.)
+4. Use PowerShell/Terminal as Administrator/Root again and cd to the `~/bin/rhcsa9env` directory then run `vagrant up` to deploy the environment. (If the environment has a designated repo VM it will take the longest to deploy the first time only, this is because the repo system has all the packages available to the base release but will be quicker on subsequent deployments.)
 
 ## Debian
 
@@ -97,8 +97,8 @@ Also, install the Virtualbox extension pack below:
 Once the above software is installed. Do the following if you're running the environment on Linux:
 
 1. Create a separate `~/bin` directory and `cd` to it.  (The directory doesn't have to be ~/bin, it can be anything you want.)
-2. Clone the environment repo to it with `git clone https://github.com/rdbreak/rhcsa8env.git`
-3. Change to the `rhcsa8env` directory that is now in your `~/bin` directory.
+2. Clone the environment repo to it with `git clone https://github.com/hutsellma/rhcsa9env.git`
+3. Change to the `rhcsa9env` directory that is now in your `~/bin` directory.
 4. Run `vagrant up` to deploy the environment (If the environment has a designated repo VM it will take the longest to deploy the first time only, this is because the repo system has all the packages available to the base release but will be quicker on subsequent deployments.)
 
 **Also, don't be spooked by any scary red font during the setup process. There are known issues that won't have a negative affect on the environment.**
@@ -111,7 +111,7 @@ _NOTE this requires a free Github account_
 
 1. Navigate to https://desktop.github.com/ and download Github Desktop.
 2. Create or sign in to your account.
-3. Click "Clone a repository from the Internet" and enter "rdbreak/rhcsa8env" and choose a location then "Clone".
+3. Click "Clone a repository from the Internet" and enter "hutsellma/rhcsa9env" and choose a location then "Clone".
 4. You are also able to easily pull changes when they're made available.
 
 ## Notable commands to control the environment
@@ -129,9 +129,9 @@ You can also use the VirtualBox console to interact with the VMs or through a te
 
 ## Included systems
 
-- repo.eight.example.com
-- server1.eight.example.com
-- server2.eight.example.com
+- repo.nine.example.com
+- server1.nine.example.com
+- server2.nine.example.com
 
 ## System Details
 
@@ -147,7 +147,7 @@ You can also use the VirtualBox console to interact with the VMs or through a te
 - Gateway - 192.168.55.1
 - DNS - 8.8.8.8
 
-There is a Repo/AppStream available to use from `http://repo.eight.example.com/BaseOS` and `http://repo.eight.example.com/AppStream`
+There is a Repo/AppStream available to use from `http://repo.nine.example.com/BaseOS` and `http://repo.nine.example.com/AppStream`
 
 ## Accessing the systems
 
