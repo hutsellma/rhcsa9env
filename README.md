@@ -1,12 +1,14 @@
 # RHCSA 9 Automated Practice Deployment
 
+_NOTE - This is still a WIP._
+
 Powered by Ansible and Vagrant
 
-## Installation options below:
+## Installation options below
 
 ## macOS
 
-Gatekeeper will block virtualbox from installing. All you have to do is go into Security & Privacy of System Preferences and click Allow under the General tab and rerun installation._
+Gatekeeper will block virtualbox from installing. All you have to do is go into Security & Privacy of System Preferences and click Allow under the General tab and rerun installation.
 
 Install all at once with the command below:
 
