@@ -3,7 +3,7 @@
 - name: Setting Up Server 2
   hosts: server2
   strategy: free
-  gather_facts: False
+  gather_facts: false
   ignore_errors: true
   tasks:
 
@@ -22,13 +22,13 @@
   - name: Reloading Network
     service:
       name: NetworkManager
-      state: restarted 
+      state: restarted
 
   - name: Building Host File
     copy:
       dest: /etc/hosts
       content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n::1            localhostlocalhost.localdomain localhost6 localhost6.localdomain6\n192.168.55.149 repo.eight.example.com repo\n192.168.55.150 server1.eight.example.com server1\n192.168.55.151  server2.eight.example.com server2"
-      force: yes
+      force: true
 
   - name: Erasing Repos
     shell: rm -rf /etc/yum.repos.d/*
@@ -43,7 +43,7 @@
     copy:
       dest: /etc/yum.repos.d/rpms.repo
       content: "[base]\nname=Base\nbaseurl=http://repo/BaseOS\ngpgcheck=0\nenabled=1\n\n[apps]\nname=Apps\nbaseurl=http://repo/AppStream\ngpgcheck=0\nenabled=1"
-      force: yes
+      force: true
 
   - name: Environment Packages Installed.
     yum:
@@ -54,14 +54,14 @@
     service:
       name: "{{ item }}"
       state: started
-      enabled: yes
+      enabled: true
     with_items:
       - firewalld
       - httpd
 
   - name: Erasing Repos
     shell: rm -rf /etc/yum.repos.d/*
-    become: yes
+    become: true
 
   - name: Changing User Password
     shell: echo vagrant | sudo passwd vagrant --stdin
