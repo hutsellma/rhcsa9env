@@ -181,7 +181,7 @@
 
   - name: Resetting Python
     file:
-      src: /usr/bin/python3.6
+      src: /usr/bin/python3.9
       path: /usr/bin/python
       state: link
 
