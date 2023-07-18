@@ -43,7 +43,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     repo.vm.provision :shell, :inline => "yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm -y; sudo yum install -y sshpass python3-pip python3-devel httpd sshpass vsftpd createrepo", run: "always"
     repo.vm.provision :shell, :inline => " python3 -m pip install -U pip ; python3 -m pip install pexpect; python3 -m pip install ansible", run: "always"
     repo.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/", rsync__exclude: "*.vdi"
-    repo.vm.synced_folder "rpm", "/vagrant/rpm", type: "rsync"
     repo.vm.network "private_network", ip: "192.168.55.149"
   
     repo.vm.provider "virtualbox" do |repo|

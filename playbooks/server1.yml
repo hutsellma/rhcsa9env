@@ -13,15 +13,15 @@
 
   - name: Setting Up Python
     file:
-      src: /usr/bin/python3.6
+      src: /usr/bin/python3.9
       path: /usr/bin/python
       state: link
 
   - name: Setting Hostname
-    hostname: name=server1.eight.example.com
+    hostname: name=server1.nine.example.com
 
   - name: Configuring network
-    shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.150/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search eight.example.com ipv4.method manual
+    shell: nmcli con mod "System enp0s8" ipv4.addresses 192.168.55.150/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search nine.example.com ipv4.method manual
 
   - name: Reloading Network
     service:
@@ -31,8 +31,18 @@
   - name: Building Host File
     copy:
       dest: /etc/hosts
-      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n:1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n192.168.55.149 repo.eight.example.com repo\n192.168.55.150 server1.eight.example.com server1\n192.168.55.151 server2.eight.example.com server2"
+      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n:1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n192.168.55.149 repo.nine.example.com repo\n192.168.55.150 server1.nine.example.com server1\n192.168.55.151 server2.nine.example.com server2"
       force: false
+
+  - name: break httpd
+    shell: >
+      dnf install -y httpd;
+      sed -i 's/Listen 80/Listen 85/' /etc/httpd/conf/httpd.conf;
+      echo "RHCSA is Awesome" > /var/www/html/file1;
+      cal > /var/www/html/file2;
+      echo "This file is totally messed up" > /var/www/html/file3;
+      chcon -t default_t /var/www/html/file3;
+      systemctl enable httpd
 
   - name: Erasing Repos
     file:
@@ -112,21 +122,11 @@
          # For root - use \`sudo\` or \`sudo su -\`
          #
          # Repo/AppStream
-         # Available to use from http://repo.eight.example.com/BaseOS
-         # and http://repo.eight.example.com/AppStream
+         # Available to use from http://repo.nine.example.com/BaseOS
+         # and http://repo.nine.example.com/AppStream
          "
 
   - name: Adjusting Services and Rebooting
-    selinux:
-      state: enforcing
+    ansible.posix.selinux:
       policy: targeted
-
-  - name: break httpd
-    shell: >
-      dnf install -y httpd;
-      sed -i 's/Listen 80/Listen 85/' /etc/httpd/conf/httpd.conf;
-      echo "RHCSA is Awesome" > /var/www/html/file1;
-      cal > /var/www/html/file2;
-      echo "This file is totally messed up" > /var/www/html/file3;
-      chcon -t default_t /var/www/html/file3;
-      systemctl enable httpd
+      state: enforcing

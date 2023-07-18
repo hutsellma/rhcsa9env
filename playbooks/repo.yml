@@ -8,15 +8,15 @@
   tasks:
 
   - name: Setting Hostname
-    hostname: name=repo.eight.example.com
+    hostname: name=repo.nine.example.com
 
   - name: Configuring network
-    shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.149/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.method manual
+    shell: nmcli con mod "System enp0s8" ipv4.addresses 192.168.55.149/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.method manual
 
   - name: Building Host File
     copy:
       dest: /etc/hosts
-      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n:1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n192.168.55.149 repo.eight.example.com repo\n192.168.55.150 server1.eight.example.com server1\n192.168.55.151 server2.eight.example.com server2"
+      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n:1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n192.168.55.149 repo.nine.example.com repo\n192.168.55.150 server1.nine.example.com server1\n192.168.55.151 server2.nine.example.com server2"
       force: true
 
   - name: Install nfs
@@ -40,7 +40,7 @@
       - nfs-server
 
   - name: Enabling Firewall Services
-    firewalld:
+    ansible.posix.firewalld:
       service: '{{ item }}'
       immediate: true
       permanent: true
