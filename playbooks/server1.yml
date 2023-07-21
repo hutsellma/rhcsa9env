@@ -7,11 +7,11 @@
   tasks:
 
   - name: Installing additional Packages
-    yum:
+    dnf:
       name: "{{ item }}"
       state: present
       enabled: true
-    with_items:
+    loop:
       - podman
       - httpd
 
@@ -68,7 +68,7 @@
       immediate: true
       permanent: true
       state: enabled
-    with_items:
+    loop:
       - http
       - https
       - ntp
@@ -83,7 +83,7 @@
       name: "{{ item }}"
       value: '0'
       sysctl_set: true
-    with_items:
+    loop:
       - net.ipv6.conf.lo.disable_ipv6
       - net.ipv6.conf.all.disable_ipv6
 

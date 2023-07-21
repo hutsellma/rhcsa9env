@@ -43,7 +43,7 @@
   #    force: true
 
   - name: Environment Packages Installed.
-    yum:
+    dnf:
       name: man-pages
       state: present
 
@@ -52,7 +52,7 @@
       name: "{{ item }}"
       state: started
       enabled: true
-    with_items:
+    loop
       - firewalld
 
   - name: Erasing Repos

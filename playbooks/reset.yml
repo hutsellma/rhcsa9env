@@ -59,7 +59,7 @@
       name: "{{ item }}"
       state: absent
       remove: true
-    with_items:
+    loop:
       - phil
       - laura
       - stewart
@@ -69,7 +69,7 @@
     file:
       path: /"{{ item }}"
       state: absent
-    with_items:
+    loop:
       - accounting
       - marketing
 
@@ -77,7 +77,7 @@
     file:
       path: /"{{ item }}"
       state: absent
-    with_items:
+    loop:
       - tmp
       - find
 
@@ -94,7 +94,7 @@
       name: "{{ item }}"
       state: restarted
       enabled: true
-    with_items:
+    loop:
       - firewalld
       - httpd
 
@@ -104,7 +104,7 @@
       immediate: true
       permanent: true
       state: enabled
-    with_items:
+    loop:
       - http
       - https
       - ntp
@@ -119,7 +119,7 @@
       name: "{{ item }}"
       value: '0'
       sysctl_set: true
-    with_items:
+    loop:
       - net.ipv6.conf.lo.disable_ipv6
       - net.ipv6.conf.all.disable_ipv6
 
@@ -228,7 +228,7 @@
       name: "{{ item }}"
       state: absent
       remove: true
-    with_items:
+    loop:
       - phil
       - laura
       - stewart
@@ -238,7 +238,7 @@
     file:
       path: /"{{ item }}"
       state: absent
-    with_items:
+    loop:
       - accounting
       - marketing
 
@@ -246,7 +246,7 @@
     file:
       path: /"{{ item }}"
       state: absent
-    with_items:
+    loop:
       - tmp
       - find
 
@@ -282,7 +282,7 @@
       force: true
 
   - name: Environment Packages Installed.
-    yum:
+    dnf:
       name: man-pages
       state: present
 
@@ -291,7 +291,7 @@
       name: "{{ item }}"
       state: started
       enabled: true
-    with_items:
+    loop:
       - firewalld
       #- httpd
 
