@@ -2,6 +2,8 @@
 
 _NOTE - This is still a WIP._
 
+I based the setup on aggresiceHiker's rhcsa prep (https://github.com/aggressiveHiker/rhcsa9)
+
 Powered by Ansible and Vagrant
 
 ## Installation options below

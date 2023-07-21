@@ -47,6 +47,8 @@
       - dns
       - ftp
       - nfs
+      - mountd
+      - rpc-bind
 
   - name: Enabling IPV6
     sysctl:
