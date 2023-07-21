@@ -1,5 +1,4 @@
-.vagrant/
-disk-0-*.vdi/
-*.retry.yml/
-..DS_Store
-.DS_Store
+.vagrant
+disk-0-*.vdi
+**DS_Store
+.vscode
