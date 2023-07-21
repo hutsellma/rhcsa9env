@@ -10,6 +10,14 @@
     dnf:
       name: "{{ item }}"
       state: present
+    loop:
+      - podman
+      - httpd
+
+  - name: Starting services
+    service:
+      name: "{{ item }}"
+      state: started
       enabled: true
     loop:
       - podman
