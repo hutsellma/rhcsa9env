@@ -87,7 +87,7 @@
       dest: /etc/default/grub
       insertafter: 'true'
       regexp: '^(GRUB_CMDLINE_LINUX=(?!.* audit)\"[^\"]+)(\".*)'
-      line: 'GRUB_CMDLINE_LINUX="no_timer_check crashkernel=auto resume=/dev/mapper/rhel_rhel8-swap rd.lvm.lv=rhel_rhel8/root rd.lvm.lv=rhel_rhel8/swap biosdevname=0 net.ifnames=0 rhgb quiet"'
+      line: 'GRUB_CMDLINE_LINUX="no_timer_check crashkernel=auto resume=/dev/mapper/rhel-swap rd.lvm.lv=rhel/root rd.lvm.lv=rhel/swap"'
 
   - name: Starting services
     service:
@@ -256,7 +256,7 @@
       dest: /etc/default/grub
       insertafter: 'true'
       regexp: '^(GRUB_CMDLINE_LINUX=(?!.* audit)\"[^\"]+)(\".*)'
-      line: 'GRUB_CMDLINE_LINUX="no_timer_check crashkernel=auto resume=/dev/mapper/rhel_rhel8-swap rd.lvm.lv=rhel_rhel8/root rd.lvm.lv=rhel_rhel8/swap biosdevname=0 net.ifnames=0 rhgb quiet"'
+      line: 'GRUB_CMDLINE_LINUX="no_timer_check crashkernel=auto resume=/dev/mapper/rhel-swap rd.lvm.lv=rhel/root rd.lvm.lv=rhel/swap"'
 
   - name: Reading Partition Information
     parted: device=/dev/sdb unit=MiB
@@ -278,7 +278,7 @@
   - name: Building Repo File
     copy:
       dest: /etc/yum.repos.d/rpms.repo
-      content: "[base]\nname=Base\nbaseurl=http://repo/BaseOS\ngpgcheck=0\nenabled=1\n\n[apps]\nname=Apps\nbaseurl=http://repo/AppStream\ngpgcheck=0\nenabled=1"
+      content: "[BaseOS]\nname=BaseOS\nbaseurl=http://repo/BaseOS\ngpgcheck=0\nenabled=1\n\n[AppStream]\nname=AppStream\nbaseurl=http://repo/AppStream\ngpgcheck=0\nenabled=1"
       force: true
 
   - name: Environment Packages Installed.
@@ -293,7 +293,7 @@
       enabled: true
     loop:
       - firewalld
-      #- httpd
+      - httpd
 
   - name: Erasing Repos
     file:
