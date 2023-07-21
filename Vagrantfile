@@ -11,9 +11,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Repo Configuration
   config.vm.define "repo" do |repo|
     repo.vm.box = "micandhut/rhel9repo"
-    repo.vm.provision :shell, :inline => "sudo rm -f /EMPTY;", run: "always"
-    repo.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-    repo.vm.provision :shell, :inline => "yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm -y; sudo yum install -y sshpass python3-pip python3-devel httpd sshpass vsftpd createrepo", run: "always"
+    repo.vm.provision :shell, :inline => "sudo rm -f /EMPTY;"
+    repo.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;"
+    repo.vm.provision :shell, :inline => "yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm -y; sudo yum install -y sshpass python3-pip python3-devel httpd sshpass vsftpd createrepo"
     repo.vm.provision :shell, :inline => " python3 -m pip install -U pip --no-warn-script-location ; python3 -m pip install pexpect --no-warn-script-location; python3 -m pip install ansible --no-warn-script-location"
     repo.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/", rsync__exclude: "*.vdi"
     repo.vm.network "private_network", ip: "192.168.55.149"
@@ -43,19 +43,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       server1.customize ['modifyvm', :id,'--memory', '2048']
     end
 
-   server1.vm.provision :ansible_local do |ansible|
-     ansible.playbook = "/vagrant/playbooks/server1.yml"
-     ansible.install = false
-     ansible.compatibility_mode = "2.0"
-     ansible.inventory_path = "/vagrant/inventory"
-     ansible.config_file = "/vagrant/ansible.cfg"
-     ansible.limit = "all"
-   end
+      server1.vm.provision :ansible_local do |ansible|
+      ansible.playbook = "/vagrant/playbooks/server1.yml"
+      ansible.install = false
+      ansible.compatibility_mode = "2.0"
+      ansible.inventory_path = "/vagrant/inventory"
+      ansible.config_file = "/vagrant/ansible.cfg"
+      ansible.limit = "all"
+    end
     server1.vm.provision :shell, :inline => "reboot", run: "always"
   end
 
     # Server 2 Configuration
-    config.vm.define "server2" do |server2|
+    config.vm.define "server2", run: "always" do |server2|
       server2.vm.box = "micandhut/rhel9node"
       server2.vm.network "private_network", ip: "192.168.55.151"
       server2.vm.network "private_network", ip: "192.168.55.175"

@@ -36,24 +36,16 @@
       state: touch
       mode: 0755
 
-  #- name: Building Repo File
-  #  copy:
-  #    dest: /etc/yum.repos.d/rpms.repo
-  #    content: "[base]\nname=Base\nbaseurl=http://repo/BaseOS\ngpgcheck=0\nenabled=1\n\n[apps]\nname=Apps\nbaseurl=http://repo/AppStream\ngpgcheck=0\nenabled=1"
-  #    force: true
-
-  - name: Environment Packages Installed.
+  - name: Environment Packages Installed
     dnf:
       name: man-pages
       state: present
 
   - name: Starting services
     service:
-      name: "{{ item }}"
+      name: firewalld
       state: started
       enabled: true
-    loop
-      - firewalld
 
   - name: Erasing Repos
     shell: rm -rf /etc/yum.repos.d/*
