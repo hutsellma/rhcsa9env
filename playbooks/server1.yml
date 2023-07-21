@@ -6,10 +6,14 @@
   gather_facts: false
   tasks:
 
-  - name: Install podman
+  - name: Installing additional Packages
     yum:
-      name: podman
+      name: "{{ item }}"
       state: present
+      enabled: true
+    with_items:
+      - podman
+      - httpd
 
   - name: Setting Up Python
     file:
@@ -34,9 +38,8 @@
       content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n:1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n192.168.55.149 repo.nine.example.com repo\n192.168.55.150 server1.nine.example.com server1\n192.168.55.151 server2.nine.example.com server2"
       force: false
 
-  - name: break httpd
+  - name: Break httpd
     shell: >
-      dnf install -y httpd;
       sed -i 's/Listen 80/Listen 85/' /etc/httpd/conf/httpd.conf;
       echo "RHCSA is Awesome" > /var/www/html/file1;
       cal > /var/www/html/file2;
@@ -54,7 +57,7 @@
     service:
       name: "{{ item }}"
       state: started
-      enabled: yes
+      enabled: true
     with_items:
       - firewalld
       - httpd

@@ -24,11 +24,6 @@
       name: nfs-utils
       state: present
 
-  - name: Enable service nfs
-    service:
-      name: nfs-server
-      enabled: true
-
   - name: Starting services
     service:
       name: "{{ item }}"
@@ -115,7 +110,7 @@
     notify:
       - nfs-restart
 
-  - name: Fixing SELinux Contexts
+  - name: Fixing SELinux Contexts for /var/www/html
     shell: restorecon -Rv /var/www/html
 
   - name: Building Welcome Message

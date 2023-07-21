@@ -54,7 +54,6 @@
       enabled: true
     with_items:
       - firewalld
-      - httpd
 
   - name: Erasing Repos
     shell: rm -rf /etc/yum.repos.d/*
@@ -109,3 +108,6 @@
     ansible.posix.selinux:
       policy: targeted
       state: enforcing
+
+  - name: Apply welcome.yml
+    import_tasks: welcome.yml
