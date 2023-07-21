@@ -2,7 +2,7 @@
 
 _NOTE - This is still a WIP._
 
-I based the setup on aggresiceHiker's rhcsa prep (https://github.com/aggressiveHiker/rhcsa9)
+I based the setup on aggressiveHiker's RHCSA 9 Prep Repo (https://github.com/aggressiveHiker/rhcsa9)
 
 Powered by Ansible and Vagrant
 
