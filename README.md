@@ -158,7 +158,13 @@ You can also use the VirtualBox console to interact with the VMs or through a te
 - Gateway - 192.168.55.1
 - DNS - 8.8.8.8
 
-There is a Repo/AppStream available to use from `http://repo.nine.example.com/BaseOS` and `http://repo.nine.example.com/AppStream`
+> repo
+
+- 192.168.55.149
+- Gateway - 192.168.55.1
+- DNS - 8.8.8.8
+
+The BaseOS/AppStream repos are available to use from `http://repo.nine.example.com/BaseOS` and `http://repo.nine.example.com/AppStream`
 
 ## Accessing the systems
 
