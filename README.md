@@ -180,3 +180,26 @@ Error is usually "VT-x is not available. (VERR_VMX_NO_VMX)" or similar, when the
 
 Resolution seems to be either remove HyperV, or preventing its hypervisor from starting with the command:
 bcdedit /set hypervisorlaunchtype off, followed by a reboot.
+
+### LVM Issue
+Note, if doing anything with LVM, you may encounter a bug (https://bugzilla.redhat.com/show_bug.cgi?id=2072201). It will look like this: 
+
+```
+[root@server1 ~]# pvs
+  Devices file sys_wwid t10.ATA_VBOX_HARDDISK_VB4e3ffe94-b13d85e9 PVID GKrDp03CrS7uCcUG26lmIlBus0tf8urr last seen on /dev/sda2 not found.
+```
+
+To workaround, run `vgimportdevices -a` to recreate `/etc/lvm/devices/system.devices`. 
+
+```
+[root@server1 ~]# vgimportdevices -a
+  WARNING: adding device /dev/sda2 with PVID GKrDp03CrS7uCcUG26lmIlBus0tf8urr which is already used for missing device device_id t10.ATA_VBOX_HARDDISK_VB4e3ffe94-b13d85e9.
+Add device with duplicate PV to devices file?y
+  Added 1 devices to devices file.
+```
+
+This will allow you to use `pvs`, `vgs`, `lvs`, etc. 
+
+An error will still show while running the commands, but you will now be able to see LVM information. 
+
+To clear the warning, note the sys_wwid and remove it from /etc/lvm/devices/system.devices.
